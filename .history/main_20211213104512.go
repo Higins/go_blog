@@ -93,7 +93,7 @@ func setupRoutes(app *fiber.App) {
 	//app.Get("/", getAllBlog)
 
 	//app.Get("/new", authRequired(), newBlog)
-	//app.Get("/comment", authRequired(), newComments)
+	/app.Get("/comment", authRequired(), newComments)
 	app.Post("/login", login)
 
 }

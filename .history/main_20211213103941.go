@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"time"
@@ -83,17 +84,39 @@ func initDatabase() {
 	}
 
 	fmt.Println("Connection Opened to Database")
-	//var blog Blog
-	//var comments Commenst
-	//DBConn.AutoMigrate(&blog, &comments)
+	var blog Blog
+	var comments Commenst
+	DBConn.AutoMigrate(&blog, &comments)
 
+}
+
+
+
+
+func newBlog(c *fiber.Ctx) {
+	var blogRequest Blog
+	data := c.Body()
+	if err := json.Unmarshal([]byte(data), &blogRequest); err != nil {
+		fmt.Println("Can not unmarshal JSON")
+	}
+
+	db := DBConn
+	var blog Blog
+	blog.Title = blogRequest.Title
+	blog.Text = blogRequest.Text
+	log.WithFields(log.Fields{
+		"title": blogRequest.Title,
+		"text":  blogRequest.Text}).Info("New blog write")
+	db.Create(&blog)
+	c.JSON(blog)
 }
 
 func setupRoutes(app *fiber.App) {
 	//app.Get("/", getAllBlog)
+	app.Get("/", getAllBlog)
 
-	//app.Get("/new", authRequired(), newBlog)
-	//app.Get("/comment", authRequired(), newComments)
+	app.Get("/new", authRequired(), newBlog)
+	app.Get("/comment", authRequired(), newComments)
 	app.Post("/login", login)
 
 }

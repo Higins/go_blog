@@ -85,15 +85,15 @@ func initDatabase() {
 	fmt.Println("Connection Opened to Database")
 	//var blog Blog
 	//var comments Commenst
-	//DBConn.AutoMigrate(&blog, &comments)
+	DBConn.AutoMigrate(&blog, &comments)
 
 }
 
 func setupRoutes(app *fiber.App) {
-	//app.Get("/", getAllBlog)
+	app.Get("/", getAllBlog)
 
-	//app.Get("/new", authRequired(), newBlog)
-	//app.Get("/comment", authRequired(), newComments)
+	app.Get("/new", authRequired(), newBlog)
+	app.Get("/comment", authRequired(), newComments)
 	app.Post("/login", login)
 
 }
