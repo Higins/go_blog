@@ -21,6 +21,13 @@ var (
 
 const jwtSecret = "asecret"
 
+
+type Commenst struct {
+	gorm.Model
+	BlogId  string `json:"blogid"`
+	Comment string `json:"comment"`
+}
+
 func authRequired() func(ctx *fiber.Ctx) {
 	return jwtware.New(jwtware.Config{
 		ErrorHandler: func(ctx *fiber.Ctx, err error) {
