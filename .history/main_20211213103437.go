@@ -13,6 +13,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	log "github.com/sirupsen/logrus"
+	"https://github.com/Higins/go_blog/models"
 )
 
 var (

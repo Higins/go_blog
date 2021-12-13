@@ -1,7 +1,4 @@
-package models
-
-import "gorm.io/gorm"
-
+pa
 type Blog struct {
 	gorm.Model
 	Title    string `json:"title"`
