@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/jwt v0.2.0
 	github.com/sirupsen/logrus v1.8.1
+	gorm.io/gorm v1.22.4
 )
 
 require github.com/jinzhu/now v1.1.3 // indirect

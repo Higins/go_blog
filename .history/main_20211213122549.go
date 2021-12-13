@@ -13,6 +13,7 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/sqlite"
 	log "github.com/sirupsen/logrus"
+	"models/blog"
 )
 
 var (
@@ -20,18 +21,6 @@ var (
 )
 
 const jwtSecret = "asecret"
-
-type Blog struct {
-	gorm.Model
-	Title    string `json:"title"`
-	Text     string `json:"text"`
-	Commenst []Commenst
-}
-type Commenst struct {
-	gorm.Model
-	BlogId  string `json:"blogid"`
-	Comment string `json:"comment"`
-}
 
 func authRequired() func(ctx *fiber.Ctx) {
 	return jwtware.New(jwtware.Config{
