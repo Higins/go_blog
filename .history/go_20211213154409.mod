@@ -25,9 +25,5 @@ require (
 	github.com/valyala/fasthttp v1.31.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
-	github.com/Higins/go_blog/struct v1.0.0 // indirect
 
-)
-replace (
-	github.com/Higins/go_blog/struct v1.0.0 => ./struct
 )

@@ -29,5 +29,5 @@ require (
 
 )
 replace (
-	github.com/Higins/go_blog/struct v1.0.0 => ./struct
+	github.com/Higins/go_blog/struct v1.0.0 => struct
 )

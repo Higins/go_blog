@@ -7,6 +7,7 @@ require (
 	github.com/gofiber/fiber v1.14.6
 	github.com/gofiber/jwt v0.2.0
 	github.com/sirupsen/logrus v1.8.1
+	replace github.com/Higins/go_blog/struct => .
 )
 
 require github.com/jinzhu/now v1.1.3 // indirect
@@ -25,9 +26,5 @@ require (
 	github.com/valyala/fasthttp v1.31.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
 	golang.org/x/sys v0.0.0-20211210111614-af8b64212486 // indirect
-	github.com/Higins/go_blog/struct v1.0.0 // indirect
 
-)
-replace (
-	github.com/Higins/go_blog/struct v1.0.0 => ./struct
 )
