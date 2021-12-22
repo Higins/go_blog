@@ -114,12 +114,12 @@ func getAllBlog(c *fiber.Ctx) {
 
 func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		page, _ := strconv.Atoi(c.Query("page"))
+		page, _ := strconv.Atoi(r.Query("page"))
 		if page == 0 {
 			page = 1
 		}
 
-		pageSize, _ := strconv.Atoi(c.Query("page_size"))
+		pageSize, _ := strconv.Atoi(r.Query("page_size"))
 		switch {
 		case pageSize > 100:
 			pageSize = 100

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -104,34 +103,16 @@ func initDatabase() {
 
 }
 
+type FacultyModel struct {
+}
+
 func getAllBlog(c *fiber.Ctx) {
 	db := DBConn
 
 	blog := make([]Blog, 0)
-	db.Debug().Scopes(Paginate(c)).Preload("Commenst").Find(&blog)
+	db.Preload("Commenst").Find(&blog)
 	c.JSON(blog)
 }
-
-func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		page, _ := strconv.Atoi(c.Query("page"))
-		if page == 0 {
-			page = 1
-		}
-
-		pageSize, _ := strconv.Atoi(c.Query("page_size"))
-		switch {
-		case pageSize > 100:
-			pageSize = 100
-		case pageSize <= 0:
-			pageSize = 10
-		}
-
-		offset := (page - 1) * pageSize
-		return db.Offset(offset).Limit(pageSize)
-	}
-}
-
 func newComments(c *fiber.Ctx) {
 	var commentsRequest Commenst
 	data := c.Body()

@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
-	"strconv"
 	"time"
 
 	"github.com/dgrijalva/jwt-go"
@@ -106,32 +105,37 @@ func initDatabase() {
 
 func getAllBlog(c *fiber.Ctx) {
 	db := DBConn
-
-	blog := make([]Blog, 0)
-	db.Debug().Scopes(Paginate(c)).Preload("Commenst").Find(&blog)
-	c.JSON(blog)
-}
-
-func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
-	return func(db *gorm.DB) *gorm.DB {
-		page, _ := strconv.Atoi(c.Query("page"))
-		if page == 0 {
-			page = 1
-		}
-
-		pageSize, _ := strconv.Atoi(c.Query("page_size"))
-		switch {
-		case pageSize > 100:
-			pageSize = 100
-		case pageSize <= 0:
-			pageSize = 10
-		}
-
-		offset := (page - 1) * pageSize
-		return db.Offset(offset).Limit(pageSize)
+	data, error := db.Table("blogs").Joins("join commensts c on c.blog_id = blogs.id").Select("*").Rows()
+	if error != nil {
+		fmt.Println(error)
 	}
-}
+	defer data.Close()
+	blogNew := Blog{}
+	var CommenstItem Commenst
+	for data.Next() {
 
+		var err = data.Scan(
+			&blogNew.ID,
+			&blogNew.CreatedAt,
+			&blogNew.UpdatedAt,
+			&blogNew.DeletedAt,
+			&blogNew.Title,
+			&blogNew.Text,
+			&CommenstItem.ID,
+			&CommenstItem.CreatedAt,
+			&CommenstItem.UpdatedAt,
+			&CommenstItem.DeletedAt,
+			&CommenstItem.BlogId,
+			&CommenstItem.Comment)
+		if err != nil {
+			log.Panic(err)
+		}
+
+		blogNew.Commenst = append(blogNew.Commenst, CommenstItem)
+
+	}
+	c.JSON(blogNew)
+}
 func newComments(c *fiber.Ctx) {
 	var commentsRequest Commenst
 	data := c.Body()
@@ -147,7 +151,7 @@ func newComments(c *fiber.Ctx) {
 	conmment.Comment = comment
 	log.WithFields(log.Fields{
 		"blogid":  blogId,
-		"Comment": comment}).Info("New comment write")
+		"Comment": commentsRequest.Comment}).Info("New comment write")
 	db.Create(&conmment)
 	c.JSON(conmment)
 }

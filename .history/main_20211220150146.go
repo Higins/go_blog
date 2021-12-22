@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"net/http"
 	"os"
 	"strconv"
 	"time"
@@ -104,22 +105,25 @@ func initDatabase() {
 
 }
 
+type FacultyModel struct {
+}
+
 func getAllBlog(c *fiber.Ctx) {
 	db := DBConn
 
 	blog := make([]Blog, 0)
-	db.Debug().Scopes(Paginate(c)).Preload("Commenst").Find(&blog)
+	db.Preload("Commenst").Find(&blog)
 	c.JSON(blog)
 }
 
-func Paginate(c *fiber.Ctx) func(db *gorm.DB) *gorm.DB {
+func Paginate(r *http.Request) func(db *gorm.DB) *gorm.DB {
 	return func(db *gorm.DB) *gorm.DB {
-		page, _ := strconv.Atoi(c.Query("page"))
+		page, _ := strconv.Atoi(r.Query("page"))
 		if page == 0 {
 			page = 1
 		}
 
-		pageSize, _ := strconv.Atoi(c.Query("page_size"))
+		pageSize, _ := strconv.Atoi(r.Query("page_size"))
 		switch {
 		case pageSize > 100:
 			pageSize = 100
